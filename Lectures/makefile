@@ -8,3 +8,8 @@ pdf:
 html:
 	jupyter nbconvert --to slides *.ipynb
 	mv *.html export_html
+
+PANDOC = pandoc
+IFORMAT = markdown
+mdpdf: 
+	$(PANDOC) -s -f $(IFORMAT)+latex_macros -t beamer -o 01_ErrorControlCoding.pdf --slide-level 3 --include-in-header macros.md  01_ErrorControlCoding.md 
