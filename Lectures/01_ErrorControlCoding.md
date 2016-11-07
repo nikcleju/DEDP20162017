@@ -612,7 +612,7 @@ meaning that the **output polynomial  = input polynomial / g(x) polynomial**.
 
 * A systematic cyclic encoder circuit:
     * more complicated
-    * must analyze first Linear Feedback Shift Registers (LSFR) 
+    * must analyze first Linear Feedback Shift Registers (LFSR) 
 
 ### Linear-Feedback Shift Registers (LFSR)
 
@@ -628,7 +628,7 @@ to the input of the next one
     - the bit sequence is shifted to the right 
     - has an input (for the first cell)
 
-* A  **linear feedback shift register** (LSFR) =  a shift register for which
+* A  **linear feedback shift register** (LFSR) =  a shift register for which
 the input is a computed as a linear combination of the flip-flops values
     - input = usually a XOR of some cells from the register
     - like a division circuit without any input
@@ -636,9 +636,9 @@ the input is a computed as a linear combination of the flip-flops values
     - example at whiteboard
 
 
-### States and transitions of LSFR
+### States and transitions of LFSR
 
-* **State** of the LSFR = the sequence of bit values it holds at a certain 
+* **State** of the LFSR = the sequence of bit values it holds at a certain 
 moment
 
 * The state at the next moment, $S(k+1)$,  can be computed by multiplication
@@ -660,11 +660,11 @@ g_0 & g_1 & g_2 & ... & g_{m-1} \\
 * Starting at time 0, then the state at time $k$ is:
 $$S(k) = [T]^k S(0)$$
 
-### Period of LSFR
+### Period of LFSR
 
 * The number of states is finite --> they must repeat at some moment
-* The state equal to 0 must not be encountered (LSFR will remain 0 forever)
-* The **period** of the LSFR = number of time moments until the state repeats
+* The state equal to 0 must not be encountered (LFSR will remain 0 forever)
+* The **period** of the LFSR = number of time moments until the state repeats
 * If period is $N$, then state at time $N$ is same as state at time $0$:
 $$S(N) = [T]^N S(0) = S(0),$$
 which means:
@@ -673,13 +673,13 @@ $$[T]^N = I_m$$
 * Maximum period is $N_{max} = 2^m-1$ (excluding state 0), in this case the
 polynomial $g(x)$ is called **primitive polynomial**
 
-### LSFR with inputs
+### LFSR with inputs
 
-* What if the LSFR has an input added to the feedback (XOR)?
+* What if the LFSR has an input added to the feedback (XOR)?
     * example at whiteboard
     * assume the input is a sequence $a_{N-1}, ... a_0$
 
-* Since a LSFR is a **linear circuit**, the effect is added:
+* Since a LFSR is a **linear circuit**, the effect is added:
 $$S(1) = [T] \cdot S(0) + 
 \begin{bmatrix}
 0\\
@@ -703,16 +703,16 @@ $$[U] = \begin{bmatrix}
 
 * Draw on whiteboard only (sorry!)
 
-* Initially the LSFR state is 0 (all cells are 0)
+* Initially the LFSR state is 0 (all cells are 0)
 
 
 * Switch in position I:
     - information bits applied to the output and to the division circuit
     - first bits = information bits, systematic, OK
-    - LSFR with feedback and input, input = information bits
+    - LFSR with feedback and input, input = information bits
 
 * Switch in position II:
-    - LSFR with feedback and input, input = feedback
+    - LFSR with feedback and input, input = feedback
     - output bits are also applied to the input of the division circuit
 
 * In the end all cells end up in 0, so ready for next encoding
@@ -740,11 +740,117 @@ $$[U] = \begin{bmatrix}
 * Cyclic codes are linear block codes, so they have a parity-check and a generator matrix
     * but it is more efficient to implement them with polynomial multiplication / division circuits
 
-* The parity-check matrix $[H]$ can be deduced by analyzing the states of the LSFR
-    * it is a LSFR with feedback and input
+* The parity-check matrix $[H]$ can be deduced by analyzing the states of the LFSR
+    * it is a LFSR with feedback and input
     * the input is the codeword $c(x)$
     * do computations at whiteboard ...
     * ... arrive at expression for matrix $[H]$
+
+### The parity-check matrix for systematic cyclic codes
+
+* The parity check matrix $[H]$ has the form
+$$[H] = [U, TU, T^2U, ... T^{n-1}U]$$
+
+* The cyclic codeword satisfies the usual relation
+$$S(n) = 0 = [H] \mathbf{c^T}$$ 
+
+* In case of error, the state at time $n$ will be the syndrome (non-zero):
+$$S(n) = [H] \mathbf{r^T} \neq 0$$
+
+### Cyclic decoder implemented with LFSR
+
+* Implement a 1-error-correcting cyclic decoder using LFSRs
+* Draw schematic at whiteboard only (sorry!)
+* Contents of schematic:
+    - main shift register MSR
+    - main switch SW
+    - 2 LFSRs (divider circuits) after $g(x)$
+    - 2 error locator blocks, one for each divider
+    - 2 validation gates V1, V2, for each divider
+    - output XOR gate for correcting errors
+
+### Cyclic decoder implemented with LFSR
+
+* Operation phases:
+
+1. Input phase: SW on position I, validation gate V1 blocked
+    - The received codeword $r(x)$ is received one by one, starting with largest power of $x^n$
+    - The received codeword enters the MSR and first LFSR (divider)
+    - The first divider computes $r(x) : g(x)$
+    - The validation gate V1 is blocked, no output
+
+* Input phase ends after $n$ moments, the switch SW goes into position II
+* If the received word has no errors, all LFSR  cells are 0 (no remainder),
+will remain 0, the error locator will always output 0
+
+
+### Cyclic decoder implemented with LFSR
+
+2. Decoding phase: SW on position II, validation gate V1 open
+    - LFSR keeps running with no input for $n$ more moments
+    - the MSR provides the received bits at the output, one by one
+    - **exactly when the erroneous bit is at the main output of MSR, the error locator will output 1, and the output XOR gate will correct the bit (TO BE PROVEN)**
+    - during this time the next codeword is loaded into MSR and into second LFSR (input phase for second LFSR)
+
+* After $n$ moments, the received word is fully decoded and corrected
+* SW goes back into position I, the second LFSR starts decoding phase, while the first LFSR is loading the new receiver word, and so on
+
+* **To prove:** error locator outputs 1 exactly when the erroneous bit is at the main output
+
+
+### Cyclic decoder implemented with LFSR
+
+**Theorem:** if the $k$-th bit $r_{n-k}$ from $r(x)$ has an error, the error locator will output 1 exactly after $k-1$ moments
+
+* The $k$-th bit will be output from MSR after $k-1$ moments, i.e. exactly when the error locator will output 1 --> will correct it
+
+* **Proof:**
+    1. assume error on position $r_{n-k}$
+    2. the state of the LFSR at end of phase I = syndrome = column $(n-k)$ from $[H]$
+    $$S(n) = [H]\mathbf{r}^T = [H] \mathbf{e}^T = T^{n-k}U$$
+    3. after another $k-1$ moments, the state will be
+    $$T^{k-1}T^{n-k}U = T^{n-1}U$$
+    4. since $T^n = I_n$ --> $T^{n-1} = T^{-1}$
+    5. $T^{-1}U$ is the state preceding state U, which is state
+    $$\begin{bmatrix} 1 \\ 0 \\ ... \\ 0 \end{bmatrix}$$
+
+
+### Cyclic decoder implemented with LFSR
+
+* Step 5 above can be shown in two ways:
+    - reasoning on the circuit
+    - using the definition of $T^{-1}$
+
+$$T = 
+\begin{bmatrix}
+g_1 & g_2 & ...g_{m-1} & 1 \\
+1 & 0 & ... & 0 & 0 \\
+0 & 1 & ... & 0 & 0\\
+\cdot & \cdot & \cdot & ... & \cdot \\
+0 & 0 & ... & 1 & 0 \\
+\end{bmatrix}$$
+
+* The error locator is designed to detect this state $T^{-1}U$, 
+i.e. it is designed as shown
+
+* Therefore, the error locator will correct an error
+* This works only for 1 error, due to proof (1 column from [H])
+
+### Thresholding cyclic decoder
+
+* A different variant of cyclic decoder
+
+* Consider the parity check matrix $[H]$ of the cyclic code
+
+* Perform **elementary transformations** on $[H]$ to obtain a **reduced** matrix $[H_R]$ such that:
+    - last column contains only 1's
+    - all other columns contain a single 1 somewhere
+
+* **Elementary transformation** = summation of two rows
+
+* Some rows can be deleted if they cannot be put into required form
+--> 
+the matrix $[H_R]$ will have $J$ rows (the more the better)
 
 
 ### Error detection with cyclic codes
