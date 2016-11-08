@@ -852,6 +852,59 @@ i.e. it is designed as shown
 --> 
 the matrix $[H_R]$ will have $J$ rows (the more the better)
 
+* Denote with $A_j$ the entries of the resulting vector:
+$$A = \begin{bmatrix}A_1 \\ A_2 \\ .. \\ A_J \end{bmatrix} = [H_R] r^T$$
+
+
+### Thresholding cyclic decoder
+
+* Because a codeword $c^T$ produces 0 when multiplied with $[H]$, it will
+produce 0 when multiplied with $[H_R]$ also
+    * because rows of $[H_R]$ = summation of rows of $[H]$, but $c^T$ makes 
+    a 0 with all of them
+
+* Then
+$$A = [H_R] r^T = [H_R] (c+e)^T = [H_R] e^T$$
+
+* $e^T$ is the error word having 1's where errors are
+
+* Consider how many of the entries $A_k$ are equal to 1
+    * If there is just one error on last position of $e$, **all** $A_k$ are 1
+    * If there is just one error on some other position (non-last), only 
+    a **single** $A_k$ is 1
+
+### Thresholding cyclic decoder
+
+**Theorem:** If there are at most $\left \lfloor \frac{J}{2} \right \rfloor$ errors in $e$, then
+    * if $\sum A_k > \left \lfloor \frac{J}{2} \right \rfloor$, then there is an error on last position
+    * if $\sum A_k \leq \left \lfloor \frac{J}{2} \right \rfloor$, then there is no error on last position
+
+* So we can **reliably** detect an error on last position even though there
+might be errors on other positions
+
+**Proof:**
+    * if no error is on last position, at most $\left \lfloor \frac{J}{2} \right \rfloor$ sums $A_k$ are equal to 1
+    * if there is error on last position, then there are less than half errors on other position, so less then half $A_k$'s are 0
+
+* Because the code is cyclic, we can rotate the codeword so that next bit is last one --> compute again and decide for second bit, and so on for all
+
+### Thresholding cyclic decoder
+
+* Draw schematic on whiteboard only (sorry!)
+* Contents:
+    * a cyclic shift register 
+    * circuits for computing the sums $A_k$
+    * *adder and comparator* that adds all $A_j$ and compares sum
+    with $\left \lfloor \frac{J}{2} \right \rfloor$
+    * output XOR gate for correcting the error
+
+* Operation
+    * received word is loaded into shift register
+    * compute $A_j$, decide and correct error on first bit (last position)
+    * word rotates cyclically, do the same on next bit
+    * and so on until all bits have been on last position and corrected
+
+
 
 ### Error detection with cyclic codes
 
