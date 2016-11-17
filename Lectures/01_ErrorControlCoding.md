@@ -39,7 +39,7 @@ Example: consider the following BSC channel (p = 0.01, $p(x_1) = 0.5$, $p(x_2)=0
 ### Modelling the errors on the channel
 
 * We consider only binary channels (symbols = $\left\lbrace 0,1 \right\rbrace$)
-* An error = a bit is changed from 0 to 1 or viceversa
+* An error = a bit is changed from 0 to 1 or vice-versa
 * Changing the value of a bit = modulo-2 sum with 1
 * Value of a bit remains the same = modulo-2 sum with 0
     
@@ -875,14 +875,15 @@ $$A = [H_R] r^T = [H_R] (c+e)^T = [H_R] e^T$$
 
 ### Thresholding cyclic decoder
 
-**Theorem:** If there are at most $\left \lfloor \frac{J}{2} \right \rfloor$ errors in $e$, then
+* **Theorem:** If there are at most $\left \lfloor \frac{J}{2} \right \rfloor$ errors in $e$, then
+
     * if $\sum A_k > \left \lfloor \frac{J}{2} \right \rfloor$, then there is an error on last position
     * if $\sum A_k \leq \left \lfloor \frac{J}{2} \right \rfloor$, then there is no error on last position
 
 * So we can **reliably** detect an error on last position even though there
 might be errors on other positions
 
-**Proof:**
+* **Proof:**
     * if no error is on last position, at most $\left \lfloor \frac{J}{2} \right \rfloor$ sums $A_k$ are equal to 1
     * if there is error on last position, then there are less than half errors on other position, so less then half $A_k$'s are 0
 
@@ -905,41 +906,83 @@ might be errors on other positions
     * and so on until all bits have been on last position and corrected
 
 
+### Packets of errors
 
-### Error detection with cyclic codes
+* Until now, we considered a single error
+* If errors appear **independently** in a long data sequence, they will
+be typically rare --> only one error in a codeword is likely
+* So a single error may be good enough for random errors
 
-* Like usual for linear codes: check if received word is codeword or not
+But:
 
-* Every codeword is multiple of $g(x)$
+* In real life, many times the errors appear in packets
+* A **packet of errors** (*an error burst*) is a sequence of two or more
+**consecutive errors**
+    * examples: fading in wireless channels
 
-* Check if received word is actually dividing with $g(x)$
-    * Use a circuit for division of polynomials
-    
-* If remainder is 0 => it is a codeword, no error
+*  The **length**  of the packet = the number of consecutive errors
 
-* If remainder is non-0 => error detected!
+### Condition on columns of [H]
 
-* Cyclic codes have very good error detection capabilities
+* Consider $e$ errors in a codeword
 
-### Error correction capability
+Conditions on the parity-check matrix $[H]$:
+
+* Error **detection** of $e$ independent errors
+    * sum of **any** $e$ or fewer columns is **non-zero**
+* Error **detection** of a packet of $e$ errors
+    * sum of any **consecutive** $e$ or fewer columns is **non-zero**
+* Error **correction** of $e$ independent errors
+    * sum of **any** $e$ or fewer columns is **unique**
+* Error **correction** of a packet of $e$ errors
+    * sum of any **consecutive** $e$ or fewer columns is **unique**
+
+
+### Detection of packets of errors
 
 **Theorem**:
 
-Any (n,k) cyclic codes is capable of detecting any error **burst** of length $n-k$ or less.
+Any (n,k) cyclic codes is capable of detecting any error packet of length $n-k$ or less
+
+* In other words: remainder after division with $g(x)$ is always non-zero
 
 * A large fraction of longer bursts can also be detected (but not all)
 
-* For non-burst errors (random): more difficult to analyze
+* No proof (too complicated)
 
-### Error correction with cyclic codes
+### Correction of packets of errors
 
-* Like usual for linear codes: lookup table based on remainder
+* More difficult to analyze in general, will consider **only the case of packets two errors**
 
-* Remainder of division = the effect of the error polynomial
+* Cyclic encoder: identical! (might need a longer $g(x)$ though)
 
-* Create lookup table: for every error word, compute remainder
+* Cyclic decoder with LFSR: similar, but **error locator must be changed**
 
-* Search the table for the remainder of the received word => find error word
+### Cyclic decoder for packets of 2 errors or less
+
+* Similar schematic, but **error locator** is changed
+
+* Operation is identical
+
+* Error locator:
+
+    * Assume the error word has errors on positions $(n-k)$ and $(n-k-1)$
+
+    * After phase I, the state of the LFSR = column $(n-k)$ + column $(n-k-1)$ 
+    $$S(n) = T^{n-k}U \oplus T^{n-k-1}U$$
+
+    * After $k-1$ samples, the first erroneous bit is at the output, and the state is
+    $$S(n+k-1) = T^{-1}U \oplus T^{-2}U = \begin{bmatrix} 0 \\ 1 \\ ... \\ 0 \end{bmatrix}$$
+
+    * At the next sample, the state will be 
+    $$S(n+k) = T^{-1}U = \begin{bmatrix} 1 \\ 0 \\ ... \\ 0 \end{bmatrix}$$
+
+
+### Design of error locator
+
+* The error locator must detect these two states --> draw on whiteboard
+
+* If only a single error appears --> also works
 
 ### Summary of cyclic codes
 
@@ -949,6 +992,11 @@ $$c(x) = i(x) \cdot g(x)$$
 * Systematic:
 $$c(x) = b(x) \oplus X^{n-k}i(x)$$
     *  $b(x)$ is the remainder of dividing $X^{n-k} i(x)$ to $g(x)$
-* Syndrome = remainder of division $r(x)$ to $g(x)$
-* Error detection: remainder (syndrome) non-zero
-* Error correction: lookup table
+
+* A codeword is always a multiple of $g(x)$
+* Error detection: divide by $g(x)$, look at remainder
+* Schematics:
+    * Cyclic encoder
+    * Cyclic decoder with LFSR
+    * Thresholding cyclic decoder
+    * Encoder/decoder for packets of up to 2 errors
