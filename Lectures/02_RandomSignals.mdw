@@ -230,3 +230,59 @@ $$R_{ff}(t_1,t_2) = \lim_{T \to \infty} \frac{1}{T} \int_{-T/2}^{T/2} f^{(k)}(t_
 $$R_{fg}(t_1,t_2) = \overline{f^{(k)}(t_1 + t) g^{(k)}(t_2+t)}$$
 $$R_{fg}(t_1,t_2) = \lim_{T \to \infty} \frac{1}{T} \int_{-T/2}^{T/2} f^{(k)}(t_1+t) g^{(k)}(t_2 + t) dt$$
 
+### Stationary random processes
+
+* All the statistical averages are dependent on the time $t_1$
+    * i.e. they might be different for a sample at $t_2$
+
+* **Stationary** random process =  when statistical averages
+are identical upon shifting the time origin (e.g. delaying the signal
+
+* The PDF are identical when shifting the time origin:
+$$w_n(x_1,...x_n; t_1,...t_n) = w_n(x_1,...x_n; t_1+\tau,... t_n + =tau)$$
+
+* Strictly stationary / strongly stationary / strict-sense stationary:
+    * relation holds for every $n$
+
+* Weakly stationary / wide-sense stationary:
+    * relation holds only for $n=1$ and $n=2$  (the most used)
+
+### Consequences of stationarity
+
+* For $n=1$:
+$$w_1(x_i;t_1) = w_1(x_i; t_2) = w_1(x_i)$$
+
+* Consequence: the average value, average squared value, variance
+of a sample are all **identical** for any time $t$
+$$\overline{f(t)} = constant, \forall t$$
+$$\overline{f^2(t)} = constant, \forall t$$
+$$\sigma^2(t) = constant, \forall t$$
+
+* For $n=2$:
+$$w_2(x_i,x_j;t_1,t_2) = w_2(x_i,x_j;0, t_2-t_1) = w_2(x_i,x_2; t_2-t_1)$$
+
+* Consequence: the autocorrelation / correlation functions depend only on the 
+**time difference** $t_2 - t_1$ between the samples,
+no matter where they are located
+$$R_{ff}(t_1,t_2) = R_{ff}(t_2 - t_1) = R_{ff}(\tau)$$
+$$R_{fg}(t_1,t_2) = R_{fg}(t_2 - t_1) = R_{fg}(\tau)$$
+
+### Ergodic random processes
+
+* In practice, we have access to a single realization 
+
+* **Ergodic** random process = when the temporal averages on any realization
+are **equal** to the statistical averages
+
+* We can compute all averages from a single realization
+    * the realization must be very long (length $\to \infty$)
+    * a realization is characteristic of the whole process
+    * realizations are all similar to the others, statistically
+
+* Most random processes we are about are ergodic and stationary
+    * e.g. noises
+
+* Example of non-ergodic process:
+    * throw a dice, then the next 50 values are identical to the first
+    * a single realization is not characteristic
+
