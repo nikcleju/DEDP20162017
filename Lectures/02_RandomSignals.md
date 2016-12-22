@@ -286,3 +286,80 @@ are **equal** to the statistical averages
     * throw a dice, then the next 50 values are identical to the first
     * a single realization is not characteristic
 
+### Practical distributions
+
+* Some of the most encountered probability density functions:
+
+* The uniform distribution $U[a,b]$
+    * insert expression here
+
+* The normal (gaussian) distribution $N(\mu, \sigma^2)$
+$$f(x) = \frac{1}{\sigma \sqrt{2 \pi}}e^{\frac{(x - \mu)^2}{2 \sigma^2}}$$
+    * has average value $\mu$
+    * has variance (*"dispersia"*) $\sigma^2$
+    * has the familiar "bell" shape
+    * variance controls width
+    * narrower = taller, fatter = shorter
+
+### Computation of probabilities for normal functions
+
+* We sometimes need to compute $\int_a^b$ of a normal function
+
+* Use *the error function*:
+$$erf(z) = \frac{2}{\sqrt{\pi}} \int_0^z e^{-t^2} dt$$
+
+* The cumulative distribution function of a normal distribution $N(\mu, \sigma^2$)
+$$F(X) = \frac{1}{2}(1 + erf(\frac{x - \mu}{\sigma \sqrt{2}}))$$
+
+* The error function can be simply calculated on Google, e.g. search $erf(0.5)$
+
+* Also, we might need:
+    * $erf(-\infty) = -1$
+    * $erf(\infty) = 1$
+
+* Examples at blackboard
+
+### Properties of the auto-correlation function
+
+* For a stationary random process:
+$$R_{ff}(\tau) = \overline{f(t) f(t + \tau)}$$
+$$R_{ff}(t_1, t_2) = R_{ff}(\tau = t_2 - t_1)$$
+
+* Is the average value of a product of two samples time $\tau$ apart
+* Depends on a single value $\tau$ = time difference of the two samples
+
+### The Wiener-Khinchin theorem
+
+* *Rom: teorema Wiener-Hincin*
+
+* **The Fourier transform of the autocorr function = power spectral density of the process**
+$$S_{ff}(\omega) = \int_{-\infty}^{\infty} R_{ff}(\tau) e^{- j \omega \tau} d\tau$$
+$$R_{ff}(\tau) = \frac{1}{2 \pi}\int_{-\infty}^{\infty} S_{ff}(\omega) e^{j \omega \tau} d\omega$$
+
+* No proof
+
+* The power spectral density
+    * tells the average power of the process at every frequency
+
+* Some random processes have low frequencies (they vary rather slowly)
+* Some random processes have high frequencies (they vary rather fast)
+
+### White noise
+
+* White noise = random process with autocorr function = a Dirac
+$$R_{ff}(\tau) = \delta(\tau)$$
+
+* Any two different samples are not correlated
+    * all samples are absolutely independent one of the other
+    
+* Power spectral density = a constant
+    * has equal power at all frequencies
+    
+* In real life, power goes to 0 for very high frequencies
+    * e.g. samples which are very close are necessarily correlated
+    * = *limited white noise*
+
+
+### Properties of the autocorrelation function
+
+1. Is even
