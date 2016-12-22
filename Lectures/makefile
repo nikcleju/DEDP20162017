@@ -14,7 +14,12 @@ IFORMAT = markdown
 mdpdf: 
 	$(PANDOC) -s -f $(IFORMAT)+latex_macros -t beamer -o 01_ErrorControlCoding.pdf --slide-level 3 --include-in-header macros.md  01_ErrorControlCoding.md 
 
-mdwpdf:
+mdw2pdf:
 	pweave -f pandoc 02_RandomSignals.mdw
 	$(PANDOC) -s -f $(IFORMAT)+latex_macros -t beamer -o 02_RandomSignals.pdf --slide-level 3 --include-in-header macros.md  02_RandomSignals.md 
 	gnome-open 02_RandomSignals.pdf
+	
+mdw3pdf:
+	pweave -f pandoc 03_SignalDetectionTheory.mdw
+	$(PANDOC) -s -f $(IFORMAT)+latex_macros -t beamer -o 03_SignalDetectionTheory.pdf --slide-level 3 --include-in-header macros.md  03_SignalDetectionTheory.md 
+	gnome-open 03_Signal DetectionTheory.pdf

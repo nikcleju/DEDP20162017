@@ -363,3 +363,31 @@ $$R_{ff}(\tau) = \delta(\tau)$$
 ### Properties of the autocorrelation function
 
 1. Is even
+$$R_{ff}(\tau) = R_{ff}(-\tau)$$
+
+* Proof: change variable in definition
+
+2. At infinite it goes to a constant
+$$R_{ff}(\infty) = \overline{f(t)}^2 = const$$
+
+* Proof: two samples separated by $\infty$ are independent
+
+3. Is maximum in 0
+$$R_{ff}(0) \geq R_{ff}(\tau)$$
+
+* Proof: start from $\overline{(f(t) - f(t + \tau))^2} \geq 0$
+* Interpretation: different samples might vary differently, by a sample is always identical with itself
+
+### Properties of the autocorrelation function
+
+4. Value in 0 = the power of the random process
+$$R_{ff}(0) = \frac{1}{2 \pi} \int_{-\infty}^{\infty} S_{ff}(\omega) d\omega$$
+
+* Proof: Put $\tau = 0$ in inverse Fourier transform of Wiener-Khinchin theorem
+
+5. Variance = difference between values at 0 and $\infty$
+$$\sigma^2 = R_{ff}(0) - R_{ff}(\infty)$$
+
+* Proof: $R_{ff}(0) = \overline{f(t)^2}$, $R_{ff}(\infty) = \overline{f(t)}^2$
+
+
