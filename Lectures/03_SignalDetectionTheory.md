@@ -3,12 +3,16 @@
 
 ### The model for signal detection
 
-* Draw schematic here:
+![Signal detection model](img/SignalDetectionModel.png){#id .class width=60%}
+
+* Contents:
     * Information source: generates messages $a_n$ with probabilities $p(a_n)$
     * Modulator: transmits a signal $s_n(t)$ for message $a_n$
     * Channel: adds random noise
     * Sampler: takes samples from the signal $s_n(t)$
-    * Reciver: **decides** what message $a_n$ has been transmitted
+    * Receiver: **decides** what message $a_n$ has been transmitted
+
+### Example
 
 * A simple case (binary):
     * two messages $a_0$ and $a_1$
@@ -25,7 +29,7 @@
     * $H_1$: $a_1$ has been transmitted
 
 * The sample $r = s + n$
-    * if more samples, then they are vectors $\overrightarrow{r} = overrightarrow{s} + \overrightarrow{n}$
+    * if more samples, then they are vectors $\overrightarrow{r} = \overrightarrow{s} + \overrightarrow{n}$
 
 * Decision based on regions:
     * if $r$ in region $R_0$, then decide $D_0$: was $a_0$
@@ -42,9 +46,9 @@
 ### Minimum risk (cost) criterion
 
 * How to choose the threshold? We need criteria
-    * In general: how to choose regions $R_i$?
+    * In general: how to delimit regions $R_i$?
 
-* Minimum risk (cost) criterion: assign costs to decisions, nimiza average cost
+* Minimum risk (cost) criterion: assign costs to decisions, minimize average cost
     * $C_{ij}$ = cost of decision $D_i$ when symbol was $a_j$
     * $C_{00}$ = cost for good $a_0$ detection
     * $C_{10}$ = cost for false alarm
@@ -52,9 +56,9 @@
     * $C_{11}$ = cost for good $a_1$ detection
 
 *  The risk = the average cost
-$$R = C_{00} P(D_0 \cap a_0) + ...$$
+$$R = C_{00} P(D_0 \cap a_0) + C_{10} P(D_1 \cap a_0) + C_{01} P(D_0 \cap a_1) + C_{11} P(D_1 \cap a_1)$$
 
-* Minimum risk criterion: **minimize the risk**
+* Minimum risk criterion: **minimize the risk R**
 
 ### Computations
 
@@ -69,7 +73,7 @@ $$\Lambda(r) \gtrless K$$
 
 * Interpretation: effect of costs, probabilities (move threshold)
 
-* Can also apply logarithm (useful for normal disribution)
+* Can also apply logarithm (useful for normal distribution)
 $$\ln \Lambda(r) \gtrless \ln K$$
 
 * Example at blackboard: random noise with $N(0, \sigma^2)$, one sample
@@ -81,7 +85,7 @@ $$\ln \Lambda(r) \gtrless \ln K$$
 
 * Particular case of minimum risk, with
     * $C_{00} = C_{11} = 0$ (good decisions bear no cost)
-    * $C_{10} = C_{01}$ (pay the same in case of bad decisions
+    * $C_{10} = C_{01}$ (pay the same in case of bad decisions)
 
 $$\frac{w(r|a_1)}{w(r|a_0)} \gtrless \frac{p(a_0)}{p(a_1)}$$
 
