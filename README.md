@@ -1,9 +1,15 @@
 # Decision and Estimation in Data Processing 2016-2017
 
-Here you will find all the lectures for the class of Decision and Estimation in Data Processing which I will be teaching throughout this year.
+Here you will find all the lectures for the class of Decision and Estimation in Data Processing 
+which I'm teaching in 2016-2017 autumn semester.
 
-You can view the lectures as **slideshow** directly online, via this [link](http://nbviewer.jupyter.org/github/nikcleju/DEDP20162017/tree/master/Lectures/)
+**Preparation for exam** (including theory subjects): in preparation
 
-The lectures will also be exported to pdf soon.
+**Lectures [pdf]** You can view and download all lectures in PDF in the Lectures folder:
+
+- [Lectures\00_Introduction.pdf](Lectures/00_Introduction.pdf)
+- [Lectures\01_ErrorControlCoding.pdf](Lectures/01_ErrorControlCoding.pdf)
+- [Lectures\02_RandomSignals.pdf](Lectures/02_RandomSignals.pdf)
+- [Lectures\03_SignalDetectionTheory.pdf](Lectures/03_SignalDetectionTheory.pdf)
 
 Have fun!
